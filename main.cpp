@@ -5,38 +5,55 @@
 #include <vector>
 #include <unistd.h> // Para utilizar la función sleep y fork
 #include <wait.h> // Para utilizar la función wait
-#include <fstream> 
+#include <fstream>
 
 using namespace std;
+
+static int countShipsInInfoFolder() {
+    int count = 0;
+
+    for (int i = 1; ; i++) {
+        string infoPath = "info/nave_" + to_string(i) + "/info.txt";
+        ifstream file(infoPath);
+        if (!file.is_open()) {
+            break;
+        }
+        file.close();
+        count++;
+    }
+
+    return count;
+}
 
 int main() {
     welcomeScreen();
 
-    for(int i = 1; i <= NUM_SPACESHIPS; i++) {
+    int shipsToLaunch = countShipsInInfoFolder();
+    if (shipsToLaunch == 0) {
+        cerr << "No se encontraron carpetas nave_i dentro de /info" << endl;
+        return 1;
+    }
+
+    for(int i = 1; i <= shipsToLaunch; i++) {
         pid_t shipPID = fork();
-        
+
         if (shipPID < 0) {
             cerr << "Error al crear el proceso para la nave " << i << endl;
             cerr << "Se abortará la misión" << i << endl;
             exit(1);
         } else if (shipPID == 0) {
-            // Proceso hijo: Ejecutar el chequeo de lanzamiento de la nave con índice i
             shipLaunchChecks(i);
-
-            // Terminar el proceso hijo una vez que haya terminado su tarea
-            // Esto es importante para evitar que el proceso hijo continúe ejecutando el código del padre
             exit(0);
         }
     }
 
-    while (wait(NULL) > 0); // Esperar a que todos los procesos hijos terminen
+    while (wait(NULL) > 0);
 
-    // Ahora, vemos el resultado de cada lanzamiento
-    for(int i = 1; i <= NUM_SPACESHIPS; i++) {
+    for(int i = 1; i <= shipsToLaunch; i++) {
         usleep(SLEEP_TIME);
         string logFilePath = "info/nave_" + to_string(i) + "/log.txt";
         ifstream logFile(logFilePath);
-        
+
         if (!logFile.is_open()) {
             failedLaunch(i, "No se pudo abrir el archivo de log. Asumimos que el lanzamiento falló.");
             logFile.close();
@@ -52,7 +69,7 @@ int main() {
         } else {
             failedLaunch(i, "Estado desconocido. Asumimos que el lanzamiento falló.");
         }
-        
+
         logFile.close();
     }
 
