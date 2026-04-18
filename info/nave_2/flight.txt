@@ -1,5 +1,5 @@
 Chequeo de vuelo nave 2
-Capacidad de carga: 10500
-Combustible: 39000
-Duración: 13
+Capacidad de carga: 1161
+Combustible: 746
+Duración: 112
 FAIL
