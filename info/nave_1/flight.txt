@@ -1,3 +1,5 @@
-[AO-6X] Inicializando sistema de vuelo...
-[AO-6X] Trayectoria calculada correctamente.
+Chequeo de vuelo nave 1
+Capacidad de carga: 120000000
+Combustible: 480000
+Duración: 14
 SUCCESS

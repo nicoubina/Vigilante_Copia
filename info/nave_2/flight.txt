@@ -1,2 +1,5 @@
-[CR-17] Cálculo de ruta interrumpido por condiciones adversas.
+Chequeo de vuelo nave 2
+Capacidad de carga: 10500
+Combustible: 39000
+Duración: 13
 FAIL
