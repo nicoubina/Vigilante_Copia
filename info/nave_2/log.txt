@@ -1,0 +1,4 @@
+[CR-17] Base Aurora -> Titan
+[CR-17] Comenzando preparación para el lanzamiento...
+[CR-17] Viento superior al umbral permitido.
+FAIL

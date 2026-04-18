@@ -1,0 +1,2 @@
+[CR-17] Cálculo de ruta interrumpido por condiciones adversas.
+FAIL

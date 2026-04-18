@@ -1,0 +1,20 @@
+╔================================================╗
+║ Información de la nave AO-6X ║
+╚================================================╝
+
+==== Datos de la nave ====
+Nombre de la nave: AO-6X
+Ciudad de lanzamiento: Puerto Kernel
+Destino: Nebulix
+
+==== Datos meteorológicos ====
+Temperatura: 22 °C
+Humedad: 58 %
+Viento: 18 km/h
+Condiciones: Despejado
+Visibilidad: 93 %
+
+==== Información adicional ====
+Capacidad de carga: 12000 kg
+Combustible: 48000 litros
+Duración del viaje: 14 horas
