@@ -8,12 +8,49 @@
 
 using namespace std;
 
+static string trimSpaces(const string& s) {
+    size_t start = 0;
+    while (start < s.size() && (s[start] == ' ' || s[start] == '\t' || s[start] == '\r' || s[start] == '\n')) {
+        start++;
+    }
+
+    if (start == s.size()) return "";
+
+    size_t end = s.size() - 1;
+    while (end > start && (s[end] == ' ' || s[end] == '\t' || s[end] == '\r' || s[end] == '\n')) {
+        end--;
+    }
+
+    return s.substr(start, end - start + 1);
+}
+
 vector<string> split(const string& str, char delimiter, bool trim) {
-    throw runtime_error("Not Implemented: No se ha implementado la función split.");
+    vector<string> parts;
+    string part;
+    stringstream ss(str);
+
+    while (getline(ss, part, delimiter)) {
+        if (trim) {
+            parts.push_back(trimSpaces(part));
+        } else {
+            parts.push_back(part);
+        }
+    }
+
+    return parts;
 }
 
 string readLastLine(ifstream& fileStream) {
-    throw runtime_error("Not Implemented: No se ha implementado la función readLastLine.");
+    if (!fileStream.is_open()) return "";
+
+    string line;
+    string lastLine = "";
+
+    while (getline(fileStream, line)) {
+        lastLine = line;
+    }
+
+    return lastLine;
 }
 
 string boxedText(const string& text) {

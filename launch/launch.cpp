@@ -7,42 +7,122 @@
 
 using namespace std;
 
+static string trimSpaces(const string& s) {
+    size_t start = 0;
+    while (start < s.size() && (s[start] == ' ' || s[start] == '\t' || s[start] == '\r' || s[start] == '\n')) {
+        start++;
+    }
+
+    if (start == s.size()) return "";
+
+    size_t end = s.size() - 1;
+    while (end > start && (s[end] == ' ' || s[end] == '\t' || s[end] == '\r' || s[end] == '\n')) {
+        end--;
+    }
+
+    return s.substr(start, end - start + 1);
+}
+
+static int extractNumber(const string& text) {
+    string number = "";
+    bool started = false;
+
+    for (size_t i = 0; i < text.size(); i++) {
+        char c = text[i];
+        if ((c >= '0' && c <= '9') || (c == '-' && !started)) {
+            number += c;
+            started = true;
+        } else if (started) {
+            break;
+        }
+    }
+
+    if (number.empty() || number == "-") return 0;
+    return stoi(number);
+}
+
 void readLaunchInfo(int shipIndex, string& name, string& city, string& planet, int& temperature, int& humidity, int& wind, string& conditions, int& visibility, int& loadCapacity, int& fuelAmount, int& duration) {
-    // Recopilar información del lanzamiento
-    // Esta información se encuentra en el archivo "info/nave_<shipIndex>/info.txt"
-    // Para el formato específico del archivo, revisar la consigna
-    
-    throw runtime_error("Not Implemented: No se ha implementado la función readLaunchInfo.");
+    string filePath = "info/nave_" + to_string(shipIndex) + "/info.txt";
+    ifstream file(filePath);
+
+    if (!file.is_open()) {
+        throw runtime_error("No se pudo abrir: " + filePath);
+    }
+
+    string line;
+    while (getline(file, line)) {
+        if (line.find("Nombre de la nave:") != string::npos) {
+            name = trimSpaces(line.substr(line.find(':') + 1));
+        } else if (line.find("Ciudad de lanzamiento:") != string::npos) {
+            city = trimSpaces(line.substr(line.find(':') + 1));
+        } else if (line.find("Destino:") != string::npos) {
+            planet = trimSpaces(line.substr(line.find(':') + 1));
+        } else if (line.find("Temperatura:") != string::npos) {
+            temperature = extractNumber(line);
+        } else if (line.find("Humedad:") != string::npos) {
+            humidity = extractNumber(line);
+        } else if (line.find("Viento:") != string::npos) {
+            wind = extractNumber(line);
+        } else if (line.find("Condiciones:") != string::npos) {
+            conditions = trimSpaces(line.substr(line.find(':') + 1));
+        } else if (line.find("Visibilidad:") != string::npos) {
+            visibility = extractNumber(line);
+        } else if (line.find("Capacidad de carga:") != string::npos) {
+            loadCapacity = extractNumber(line);
+        } else if (line.find("Combustible:") != string::npos) {
+            fuelAmount = extractNumber(line);
+        } else if (line.find("Duración del viaje:") != string::npos) {
+            duration = extractNumber(line);
+        }
+    }
+
+    file.close();
 }
 
 void meteorologicalChecks(int shipIndex, int temperature, int humidity, int wind, string conditions, int visibility) {
-    // Aquí se pueden realizar los chequeos meteorológicos necesarios
-    // Recuerden que deben guardar la información en el archivo "info/nave_<shipIndex>/meteorologic.txt"
-    // El formato del archivo es el siguiente:
-    // - Si TODAS las condiciones son adecuadas, escribir en la última línea "SUCCESS"
-    // - Si alguna de las condiciones no es adecuada, escribir en la última línea "FAIL"
-    // Adicionalmente, pueden agregar información a lo largo del chequeo
-    // para que quede registrado en el archivo de log
+    string filePath = "info/nave_" + to_string(shipIndex) + "/meteorologic.txt";
+    ofstream file(filePath);
+    if (!file.is_open()) exit(1);
 
-    // NO OLVIDEN QUE LA ÚLTIMA LÍNEA DEL ARCHIVO DEBE SER "SUCCESS" O "FAIL"
-    // NO AGREGAR UN SALTO DE LÍNEA DESPUÉS DE "SUCCESS" O "FAIL"
+    bool okConditions = (conditions == "Despejado" || conditions == "despejado");
+    bool okTemperature = (temperature >= 0 && temperature <= 25);
+    bool okHumidity = (humidity >= 15 && humidity <= 85);
+    bool okWind = (wind <= 45);
+    bool okVisibility = (visibility >= 5);
 
-    throw runtime_error("Not Implemented: No se ha implementado la función meteorologicalChecks.");
+    bool success = okConditions && okTemperature && okHumidity && okWind && okVisibility;
+
+    file << "Chequeo meteorológico nave " << shipIndex << "\n";
+    file << "Condiciones: " << conditions << "\n";
+    file << "Temperatura: " << temperature << "\n";
+    file << "Humedad: " << humidity << "\n";
+    file << "Viento: " << wind << "\n";
+    file << "Visibilidad: " << visibility << "\n";
+
+    if (success) file << "SUCCESS";
+    else file << "FAIL";
+
+    file.close();
 }
 
 void flightChecks(int shipIndex, int loadCapacity, int fuelAmount, int duration) {
-    // Aquí se pueden realizar los chequeos de vuelo necesarios
-    // Recuerden que deben guardar la información en el archivo "info/nave_<shipIndex>/flight.txt"
-    // El formato del archivo es el siguiente:
-    // - Si TODOS los chequeos son exitosos, escribir en la última línea "SUCCESS"
-    // - Si alguno de los chequeos no es exitoso, escribir en la última línea "FAIL"
-    // Adicionalmente, pueden agregar información a lo largo del chequeo
-    // para que quede registrado en el archivo de log
+    string filePath = "info/nave_" + to_string(shipIndex) + "/flight.txt";
+    ofstream file(filePath);
+    if (!file.is_open()) exit(1);
 
-    // NO OLVIDEN QUE LA ÚLTIMA LÍNEA DEL ARCHIVO DEBE SER "SUCCESS" O "FAIL"
-    // NO AGREGAR UN SALTO DE LÍNEA DESPUÉS DE "SUCCESS" O "FAIL"
+    bool rule1 = (loadCapacity >= 2 * (fuelAmount * 0.81));
+    bool rule2 = (fuelAmount >= duration * 8);
+    bool success = rule1 && rule2;
 
-    throw runtime_error("Not Implemented: No se ha implementado la función flightChecks.");
+    file << "Chequeo de vuelo nave " << shipIndex << "\n";
+    file << "Capacidad de carga: " << loadCapacity << "\n";
+    file << "Combustible: " << fuelAmount << "\n";
+    file << "Duración: " << duration << "\n";
+
+    if (success) file << "SUCCESS";
+    else file << "FAIL";
+
+    file.close();
 }
 
 void shipLaunchChecks(int shipIndex) {
@@ -60,34 +140,60 @@ void shipLaunchChecks(int shipIndex) {
     ofstream log("info/nave_" + to_string(shipIndex) + "/log.txt");
     if (!log.is_open()) exit(1);
 
-    log << messageStart << city << " \u21E8 " << planet << endl;
+    log << messageStart << city << " ⇨ " << planet << endl;
     log << messageStart << "Comenzando preparación para el lanzamiento..." << endl;
     
     log << messageStart << "Iniciando sensores meteorológicos..." << endl;
 
-    // A partir de aquí, tienen que completar el código
+    pid_t meteoPID = fork();
+    if (meteoPID < 0) {
+        log << messageStart << "Error al crear proceso meteorológico." << endl;
+        log << "FAIL";
+        log.close();
+        exit(1);
+    }
 
-    // Recuerden verificar si el fork() fue exitoso o no
-    // Si el fork() no fue exitoso, el valor de retorno será negativo
+    if (meteoPID == 0) {
+        meteorologicalChecks(shipIndex, temperature, humidity, wind, conditions, visibility);
+        exit(0);
+    }
 
-    // Reucerden que el log debe tener como última línea "SUCCESS" o "FAIL", 
-    // sin salto de línea después de "SUCCESS" o "FAIL"
+    log << messageStart << "Iniciando cálculos de vuelo..." << endl;
 
-    // Una recomendación es que loggeen todo lo que pasa, esto les permitirá
-    // ver qué está pasando en cada momento y si algo falla, podrán saber dónde
+    pid_t flightPID = fork();
+    if (flightPID < 0) {
+        log << messageStart << "Error al crear proceso de vuelo." << endl;
+        log << "FAIL";
+        log.close();
+        exit(1);
+    }
 
-    // Les dejo un órden de ejecución sugerido:
+    if (flightPID == 0) {
+        flightChecks(shipIndex, loadCapacity, fuelAmount, duration);
+        exit(0);
+    }
 
-    // 1. Forkeo para el chequeo meteorológico
-    // 2. En el hijo, se ejecuta la función meteorologicalChecks, 
-    //    NO OLVIDEN TERMINAR EL PROCESO HIJO DESPUÉS DE EJECUTAR LA FUNCIÓN
-    // 3. En el padre, forkeo para el chequeo de vuelo
-    // 4. En el hijo, se ejecuta la función flightChecks
-    //    NO OLVIDEN TERMINAR EL PROCESO HIJO DESPUÉS DE EJECUTAR LA FUNCIÓN
-    // 5. Esperar a que ambos hijos terminen. Recuerden que no queremos forzar un órden
-    //    entre los dos hijos, ya que son chequeos que pueden hacerse en "paralelo".
-    // 6. En el padre, chequear los logs correspondientes a cada chequeo (meteorológico y de vuelo)
-    // 7. Si ambos chequeos son exitosos, escribir en el log del padre "SUCCESS"
-    //    Si alguno de los chequeos falla, escribir "FAIL"
-    // 8. Cerrar el log del padre
+    waitpid(meteoPID, NULL, 0);
+    waitpid(flightPID, NULL, 0);
+
+    ifstream meteoFile("info/nave_" + to_string(shipIndex) + "/meteorologic.txt");
+    ifstream flightFile("info/nave_" + to_string(shipIndex) + "/flight.txt");
+
+    string meteoResult = readLastLine(meteoFile);
+    string flightResult = readLastLine(flightFile);
+
+    meteoFile.close();
+    flightFile.close();
+
+    log << messageStart << "Recopilando información..." << endl;
+
+    if (meteoResult == "SUCCESS" && flightResult == "SUCCESS") {
+        log << messageStart << "Condiciones adecuadas para el lanzamiento." << endl;
+        log << "SUCCESS";
+    } else {
+        log << messageStart << "Condiciones no adecuadas." << endl;
+        log << "FAIL";
+    }
+
+    log.close();
 }
