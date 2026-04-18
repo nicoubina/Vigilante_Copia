@@ -1,0 +1,4 @@
+[AO-6X] Puerto Kernel -> Nebulix
+[AO-6X] Comenzando preparación para el lanzamiento...
+[AO-6X] Chequeos completados.
+SUCCESS

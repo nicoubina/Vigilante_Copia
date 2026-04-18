@@ -1,0 +1,2 @@
+[CR-17] Tormenta detectada en la ventana de despegue.
+FAIL
