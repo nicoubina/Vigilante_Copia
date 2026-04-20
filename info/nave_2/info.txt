@@ -1,20 +1,20 @@
-╔================================================╗
-║ Información de la nave CR-17 ║
-╚================================================╝
+╔════════════════════════════════════════╗
+║  Información de la nave Fork Falcon    ║
+╚════════════════════════════════════════╝
 
 ==== Datos de la nave ====
-Nombre de la nave: CR-17
-Ciudad de lanzamiento: Base Aurora
-Destino: Titan
+Nombre de la nave: Fork Falcon
+Ciudad de lanzamiento: Valle del Clock
+Destino: Hexón
 
 ==== Datos meteorológicos ====
-Temperatura: 15 °C
-Humedad: 70 %
-Viento: 28 km/h
+Temperatura: 26 °C
+Humedad: 40 %
+Viento: 4 km/h
 Condiciones: Nublado
-Visibilidad: 76 %
+Visibilidad: 16 %
 
 ==== Información adicional ====
-Capacidad de carga: 10500 kg
-Combustible: 39000 litros
-Duración del viaje: 13 horas
+Capacidad de carga: 2992 kg
+Combustible: 1261 litros
+Duración del viaje: 124 horas

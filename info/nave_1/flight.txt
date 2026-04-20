@@ -1,3 +1,1 @@
-[AO-6X] Inicializando sistema de vuelo...
-[AO-6X] Trayectoria calculada correctamente.
-SUCCESS
+FAIL

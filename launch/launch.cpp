@@ -5,8 +5,11 @@
 #include <unistd.h> // Para utilizar la función fork
 #include <wait.h> // Para utilizar la función wait
 
+
 using namespace std;
 
+// Elimina espacios y saltos al inicio y al final de un string.
+// Si el string es todo espacios devuelve vacio.
 static string trimSpaces(const string& s) {
     size_t start = 0;
     while (start < s.size() && (s[start] == ' ' || s[start] == '\t' || s[start] == '\r' || s[start] == '\n')) {
@@ -23,6 +26,9 @@ static string trimSpaces(const string& s) {
     return s.substr(start, end - start + 1);
 }
 
+// Busca y extrae el primer numero entero dentro de un string.
+// Puede incluir signo negativo al inicio.
+// Si no encuentra un numero valido devuelve 0.
 static int extractNumber(const string& text) {
     string number = "";
     bool started = false;
@@ -41,6 +47,9 @@ static int extractNumber(const string& text) {
     return stoi(number);
 }
 
+// Lee un archivo de una nave y carga los datos en variables.
+// Extrae texto y numeros segun cada campo del archivo.
+// Si no puede abrir el archivo lanza un error.
 void readLaunchInfo(int shipIndex, string& name, string& city, string& planet, int& temperature, int& humidity, int& wind, string& conditions, int& visibility, int& loadCapacity, int& fuelAmount, int& duration) {
     string filePath = "info/nave_" + to_string(shipIndex) + "/info.txt";
     ifstream file(filePath);
@@ -92,12 +101,12 @@ void meteorologicalChecks(int shipIndex, int temperature, int humidity, int wind
 
     bool success = okConditions && okTemperature && okHumidity && okWind && okVisibility;
 
-    file << "Chequeo meteorológico nave " << shipIndex << "\n";
-    file << "Condiciones: " << conditions << "\n";
-    file << "Temperatura: " << temperature << "\n";
-    file << "Humedad: " << humidity << "\n";
-    file << "Viento: " << wind << "\n";
-    file << "Visibilidad: " << visibility << "\n";
+    // file << "Chequeo meteorológico nave " << shipIndex << "\n";
+    // file << "Condiciones: " << conditions << "\n";
+    // file << "Temperatura: " << temperature << "\n";
+    // file << "Humedad: " << humidity << "\n";
+    // file << "Viento: " << wind << "\n";
+    // file << "Visibilidad: " << visibility << "\n";
 
     if (success) file << "SUCCESS";
     else file << "FAIL";
@@ -114,10 +123,10 @@ void flightChecks(int shipIndex, int loadCapacity, int fuelAmount, int duration)
     bool rule2 = (fuelAmount >= duration * 8);
     bool success = rule1 && rule2;
 
-    file << "Chequeo de vuelo nave " << shipIndex << "\n";
-    file << "Capacidad de carga: " << loadCapacity << "\n";
-    file << "Combustible: " << fuelAmount << "\n";
-    file << "Duración: " << duration << "\n";
+    // file << "Chequeo de vuelo nave " << shipIndex << "\n";
+    // file << "Capacidad de carga: " << loadCapacity << "\n";
+    // file << "Combustible: " << fuelAmount << "\n";
+    // file << "Duración: " << duration << "\n";
 
     if (success) file << "SUCCESS";
     else file << "FAIL";

@@ -8,6 +8,8 @@
 
 using namespace std;
 
+// Elimina espacios y saltos al inicio y al final de un string.
+// Si el string es todo espacios devuelve vacio.
 static string trimSpaces(const string& s) {
     size_t start = 0;
     while (start < s.size() && (s[start] == ' ' || s[start] == '\t' || s[start] == '\r' || s[start] == '\n')) {
@@ -24,6 +26,8 @@ static string trimSpaces(const string& s) {
     return s.substr(start, end - start + 1);
 }
 
+// Divide un string en partes usando un delimitador.
+// Si trim es true limpia espacios en cada parte.
 vector<string> split(const string& str, char delimiter, bool trim) {
     vector<string> parts;
     string part;
@@ -40,17 +44,20 @@ vector<string> split(const string& str, char delimiter, bool trim) {
     return parts;
 }
 
+// Lee un archivo abierto y devuelve la ultima linea.
+// Si el archivo no esta abierto devuelve vacio.
+// Recorre todo el archivo y guarda la ultima linea leida.
 string readLastLine(ifstream& fileStream) {
-    if (!fileStream.is_open()) return "";
-
-    string line;
-    string lastLine = "";
-
-    while (getline(fileStream, line)) {
-        lastLine = line;
-    }
-
-    return lastLine;
+        if (!fileStream.is_open()) return "";
+        
+            string line;
+                string lastLine = "";
+                
+                    while (getline(fileStream, line)) {
+                            lastLine = line;
+                                }
+                                
+                                    return lastLine;
 }
 
 string boxedText(const string& text) {

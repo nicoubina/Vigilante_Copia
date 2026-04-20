@@ -1,3 +1,0 @@
-[AO-6X] Iniciando análisis meteorológico...
-[AO-6X] Condiciones aptas para el despegue.
-SUCCESS
